@@ -3,10 +3,6 @@ var app = require('http').createServer(handler)
   , fs = require('fs')
 var port = process.env.PORT || 3000;
 app.listen(port);
-io.configure(function () { 
-  io.set("transports", ["xhr-polling"]); 
-  io.set("polling duration", 10);
-});
 function handler (req, res) {
   fs.readFile(__dirname + '/index.html',
   function (err, data) {
