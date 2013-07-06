@@ -1,10 +1,8 @@
 paranoid-ghost-anthology
 ========================
 
-#Install
--------
+##Install
     npm install
 
-#Run
-----
-		npm start
+##Run
+    npm start
