@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<script src="/socket.io/socket.io.js"></script>
+		<script src="/lib/library.js"></script>
 	</head>
 	<body>
 		<button id="button" onclick="socket.emit('button', { some: 'data' });">Fancy Button</button>
@@ -18,7 +19,7 @@
 				console.log(data);
 				document.getElementById("button").innerHTML = data.text;
 			});
-			socket.on('ping_awk', function (data) {
+			socket.on(library.protocals.ping_awk, function (data) {
 
 				console.log("ping:" + (new Date().getTime() - time));
 			});
@@ -26,7 +27,7 @@
 			var context = canvas.getContext("2d");
 			context.fillStyle = "rgb(200,0,0)";
 			var ping = new Date().getTime();
-			socket.emit("ping",{});
+			socket.emit(library.protocals.ping,{});
 			var time;
 			var x = 0;
 			function draw() {
