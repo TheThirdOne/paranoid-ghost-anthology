@@ -5,16 +5,37 @@
 	</head>
 	<body>
 		<button id="button" onclick="socket.emit('button', { some: 'data' });">Fancy Button</button>
+		<br>
+		<br>
+		<canvas id="main" height="500" width="500"></canvas>
 		<script>
-		  var socket = io.connect('http://localhost');
-		  socket.on('news', function (data) {
-		    console.log(data);
-		    socket.emit('my other event', { my: 'data' });
-		  });
-		  socket.on('return', function (data) {
-		  	console.log(data);
-		  	document.getElementById("button").innerHTML = data.text;
-		  });
+			var socket = io.connect('http://localhost');
+			socket.on('news', function (data) {
+			console.log(data);
+			socket.emit('my other event', { my: 'data' });
+			});
+			socket.on('return', function (data) {
+				console.log(data);
+				document.getElementById("button").innerHTML = data.text;
+			});
+			var canvas = document.getElementById("main");
+			var context = canvas.getContext("2d");
+			context.fillStyle = "rgb(200,0,0)";
+
+			var time;
+			var x = 0;
+			function draw() {
+			    requestAnimationFrame(draw);
+			    var now = new Date().getTime(),
+			        dt = now - (time || now);
+			    console.log(dt);
+			    time = now;
+			    console.log(this.x);
+			    x += dt/20;
+			    context.clearRect(0, 0, canvas.width,canvas.height);
+			    context.fillRect (10 + this.x, 10, 55, 50);
+			}
+			draw();
 		</script>
 	</body>
 </html>
