@@ -23,4 +23,8 @@ io.sockets.on('connection', function (socket) {
   socket.on('my other event', function (data) {
     console.log(data);
   });
+  socket.on('button', function (data) {
+    console.log(data);
+    socket.emit('return', {text:'yoloswagbutton'});
+  });
 });
