@@ -18,23 +18,29 @@
 				console.log(data);
 				document.getElementById("button").innerHTML = data.text;
 			});
+			socket.on('ping_awk', function (data) {
+
+				console.log("ping:" + (new Date().getTime() - time));
+			});
 			var canvas = document.getElementById("main");
 			var context = canvas.getContext("2d");
 			context.fillStyle = "rgb(200,0,0)";
-
+			var ping = new Date().getTime();
+			socket.emit("ping",{});
 			var time;
 			var x = 0;
 			function draw() {
 			    requestAnimationFrame(draw);
 			    var now = new Date().getTime(),
 			        dt = now - (time || now);
-			    console.log(dt);
+			//    console.log(dt);
 			    time = now;
-			    console.log(this.x);
+			//    console.log(this.x);
 			    x += dt/20;
 			    context.clearRect(0, 0, canvas.width,canvas.height);
 			    context.fillRect (10 + this.x, 10, 55, 50);
 			}
+
 			draw();
 		</script>
 	</body>
