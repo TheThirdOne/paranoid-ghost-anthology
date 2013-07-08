@@ -17,6 +17,10 @@ function handler (req, res) {
   if(req.url == "/lib/library.js"){
     var type =  {'Content-Type': 'text/script'};
     fs.readFile(__dirname + '/lib/library.js',funct);
+  }else
+  if(req.url == "/lib/client.js"){
+    var type =  {'Content-Type': 'text/script'};
+    fs.readFile(__dirname + '/lib/client.js',funct);
   }else{
     var type =  {'Content-Type': 'text/html'};
     fs.readFile(__dirname + '/index.html',funct);
