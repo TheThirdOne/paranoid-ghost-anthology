@@ -12,25 +12,6 @@ app.listen(port);
 function handler (req, res) {
   console.log(req.url);
   host.handler(req,res, server,util);
-  /*funct =   function (err, data) {
-    if (err) {
-      res.writeHead(500);
-      return res.end('Error loading index.html');
-    }
-    res.writeHead(200,type);
-    res.end(data);
-  };
-  if(req.url == "/lib/library.js"){
-    var type =  {'Content-Type': 'text/script'};
-    fs.readFile(__dirname + '/lib/library.js',funct);
-  }else
-  if(req.url == "/lib/client.js"){
-    var type =  {'Content-Type': 'text/script'};
-    fs.readFile(__dirname + '/lib/client.js',funct);
-  }else{
-    var type =  {'Content-Type': 'text/html'};
-    fs.readFile(__dirname + '/index.html',funct);
-  }*/
 }
 
 io.sockets.on('connection', function (socket) {
