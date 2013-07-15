@@ -1,12 +1,18 @@
 var app = require('http').createServer(handler)
   , io = require('socket.io').listen(app)
   , fs = require('fs')
-  , library = require('./lib/library.js');
+  , library = require('./public/lib/library.js')
+  , util = require('util')
+  , host = require('./statichost.js');
+var server = host.makeServer('./public')
+  ;//, handler = host.handler;
 var port = process.env.PORT || 3000;
 app.listen(port);
+
 function handler (req, res) {
   console.log(req.url);
-  funct =   function (err, data) {
+  host.handler(req,res, server,util);
+  /*funct =   function (err, data) {
     if (err) {
       res.writeHead(500);
       return res.end('Error loading index.html');
@@ -24,7 +30,7 @@ function handler (req, res) {
   }else{
     var type =  {'Content-Type': 'text/html'};
     fs.readFile(__dirname + '/index.html',funct);
-  }
+  }*/
 }
 
 io.sockets.on('connection', function (socket) {
