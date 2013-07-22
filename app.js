@@ -10,15 +10,16 @@ var port = process.env.PORT || 3000;
 app.listen(port);
 var players = [];
 var sockets = [];
+var nameIndex = 0;
+
 function handler (req, res) {
   console.log(req.url);
   host.handler(req,res, server,util);
 }
 
 io.sockets.on('connection', function (socket) {
-  players[socket.id] = new library.player();
+  players[socket.id] = new library.player(socket.id, nameIndex++);
   sockets[socket.id] = socket;
-  console.log(io.sockets);
   socket.emit(library.protocals.init, players[socket.id]);
   var address = socket.handshake.address;
   console.log("New connection from " + address.address + ":" + address.port);
@@ -31,6 +32,12 @@ io.sockets.on('connection', function (socket) {
     socket.emit('return', {text:'yoloswagbutton'});
   });
   socket.on(library.protocals.ping, function (data) {
-    socket.emit('ping_awk', data);
+    socket.emit(library.protocals.ping_awk, data);
+  });
+  socket.on(library.protocals.update, function (data) {
+    players[socket.id] = data;
+    console.log(data);
+    socket.broadcast.emit(library.protocals.update, data);
+    socket.emit(library.protocals.update_awk, data);
   });
 });
