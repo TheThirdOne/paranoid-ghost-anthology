@@ -8,13 +8,18 @@ var server = host.makeServer('./public')
   ;//, handler = host.handler;
 var port = process.env.PORT || 3000;
 app.listen(port);
-
+var players = [];
+var sockets = [];
 function handler (req, res) {
   console.log(req.url);
   host.handler(req,res, server,util);
 }
 
 io.sockets.on('connection', function (socket) {
+  players[socket.id] = new library.player();
+  sockets[socket.id] = socket;
+  console.log(io.sockets);
+  socket.emit(library.protocals.init, players[socket.id]);
   var address = socket.handshake.address;
   console.log("New connection from " + address.address + ":" + address.port);
   socket.emit('news', { hello: 'world' });

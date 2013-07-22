@@ -1,15 +1,21 @@
 var socket = io.connect('http://localhost');
+var player;
 socket.on('news', function (data) {
-console.log(data);
-socket.emit('my other event', { my: 'data' });
+    console.log(data);
+    socket.emit('my other event', { my: 'data' });
 });
 socket.on('return', function (data) {
 	console.log(data);
 	document.getElementById("button").innerHTML = data.text;
 });
 socket.on(library.protocals.ping_awk, function (data) {
-
 	console.log("ping:" + (new Date().getTime() - time));
+});
+socket.on(library.protocals.init, function (data) {
+    player = data;
+    console.log(player);
+    socket.emit(library.protocals.init_awk, {});
+    draw();
 });
 var canvas = document.getElementById("main");
 var context = canvas.getContext("2d");
@@ -27,7 +33,11 @@ function draw() {
 //    console.log(this.x);
     x += dt/20;
     context.clearRect(0, 0, canvas.width,canvas.height);
-    context.fillRect (10 + this.x, 10, 55, 50);
+    context.fillRect (player.x, player.y, 55, 50);
 }
+canvas.onclick = function(evt){
+    var rect = canvas.getBoundingClientRect();
+    player.x = evt.clientX - rect.left;
+    player.y = evt.clientY - rect.top;
+};
 
-draw();
