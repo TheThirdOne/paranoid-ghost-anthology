@@ -9,7 +9,7 @@ var server = host.makeServer('./public')
 var port = process.env.PORT || 3000;
 app.listen(port);
 var players = [];
-var sockets = [];
+var sockets = {};
 var nameIndex = 0;
 
 function handler (req, res) {
@@ -18,9 +18,11 @@ function handler (req, res) {
 }
 
 io.sockets.on('connection', function (socket) {
-  players[socket.id] = new library.player(socket.id, nameIndex++);
-  sockets[socket.id] = socket;
-  socket.emit(library.protocals.init, players[socket.id]);
+  sockets[socket.id] = nameIndex;
+  temp = new library.player(socket.id, nameIndex++);
+  players[nameIndex - 1] = temp;
+  console.log(players);
+  socket.emit(library.protocals.init, {'player': temp, 'others': players});
   var address = socket.handshake.address;
   console.log("New connection from " + address.address + ":" + address.port);
   socket.emit('news', { hello: 'world' });
@@ -35,9 +37,15 @@ io.sockets.on('connection', function (socket) {
     socket.emit(library.protocals.ping_awk, data);
   });
   socket.on(library.protocals.update, function (data) {
-    players[socket.id] = data;
+    players[sockets[socket.id]] = data;
     console.log(data);
     socket.broadcast.emit(library.protocals.update, data);
     socket.emit(library.protocals.update_awk, data);
+  });
+  socket.on('disconnect', function (data) {
+    console.log("Disconnect");
+    players.splice(sockets[socket.id],1);
+    console.log(players);
+    players = players.filter(function(e){return e}); 
   });
 });

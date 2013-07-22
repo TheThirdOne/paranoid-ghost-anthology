@@ -14,16 +14,15 @@ socket.on(library.protocals.ping_awk, function (data) {
 	console.log("ping:" + (new Date().getTime() - time));
 });
 socket.on(library.protocals.init, function (data) {
-    player = data;
-    player.others = [];
+    console.log(data);
+    player = data.player;
+    players = data.others;
     socket.emit(library.protocals.init_awk, {});
     draw();
 });
 socket.on(library.protocals.update, function (data) {
     other = data;
-    console.log(data.name);
     players[data.name] = data;
-    console.log(players);
     socket.emit(library.protocals.update_awk, {});
     draw();
 });
@@ -44,11 +43,19 @@ function draw() {
     x += dt/20;
     context.clearRect(0, 0, canvas.width,canvas.height);
     players.forEach(function(ele, ind ,arr){
-        context.fillRect (ele.x, ele.y, 55, 50);
+        if(!(ele==null||ele.name == player.name)){
+            context.fillRect (ele.x, ele.y, 55, 50);
+        }
     });
     context.fillRect (player.x, player.y, 55, 50);
 }
 canvas.onclick = function(evt){
+    var rect = canvas.getBoundingClientRect();
+    player.x = evt.clientX - rect.left;
+    player.y = evt.clientY - rect.top;
+    socket.emit(library.protocals.update, player);
+};
+canvas.onmousemove = function(evt){
     var rect = canvas.getBoundingClientRect();
     player.x = evt.clientX - rect.left;
     player.y = evt.clientY - rect.top;
