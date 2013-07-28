@@ -2,6 +2,7 @@ var socket = io.connect('http://localhost');
 var player;
 var other;
 var players = [];
+var keys = [];
 socket.on('news', function (data) {
     console.log(data);
     socket.emit('my other event', { my: 'data' });
@@ -60,5 +61,17 @@ canvas.onmousemove = function(evt){
     player.x = evt.clientX - rect.left;
     player.y = evt.clientY - rect.top;
     socket.emit(library.protocals.update, player);
+};
+document.onkeydown = function(evt){
+    if(!keys[evt.keyCode] ){
+        console.log(evt);
+        keys[evt.keyCode] = true;
+    }
+    
+};
+document.onkeyup = function(evt){
+    console.log(evt);
+    keys[evt.keyCode] = false;
+    //console.log(String.fromCharCode(character) + "," + evt.keyCode);
 };
 
