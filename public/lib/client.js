@@ -72,6 +72,5 @@ document.onkeydown = function(evt){
 document.onkeyup = function(evt){
     console.log(evt);
     keys[evt.keyCode] = false;
-    //console.log(String.fromCharCode(character) + "," + evt.keyCode);
 };
 
