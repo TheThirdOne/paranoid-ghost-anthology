@@ -30,9 +30,13 @@ io.sockets.on('connection', function (socket) {
   });
   socket.on(library.protocals.update, function (data) {
     players[sockets[socket.id]] = data;
-    console.log(data);
+    //console.log(data);
     socket.broadcast.emit(library.protocals.update, data);
     socket.emit(library.protocals.update_awk, data);
+  });
+  socket.on(library.protocals.action, function (data){
+    console.log(data);
+    socket.emit(library.protocals.action_awk, data);
   });
   socket.on('disconnect', function (data) {
     console.log("Disconnect");
