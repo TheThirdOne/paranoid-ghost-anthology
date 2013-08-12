@@ -25,14 +25,6 @@ io.sockets.on('connection', function (socket) {
   socket.emit(library.protocals.init, {'player': temp, 'others': players});
   var address = socket.handshake.address;
   console.log("New connection from " + address.address + ":" + address.port);
-  socket.emit('news', { hello: 'world' });
-  socket.on('my other event', function (data) {
-    console.log(data);
-  });
-  socket.on('button', function (data) {
-    console.log(data);
-    socket.emit('return', {text:'yoloswagbutton'});
-  });
   socket.on(library.protocals.ping, function (data) {
     socket.emit(library.protocals.ping_awk, data);
   });
