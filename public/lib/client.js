@@ -3,16 +3,13 @@ var player;
 var other;
 var players = [];
 var keys = [];
-socket.on('news', function (data) {
-    console.log(data);
-    socket.emit('my other event', { my: 'data' });
-});
-socket.on('return', function (data) {
-	console.log(data);
-	document.getElementById("button").innerHTML = data.text;
-});
+var bindings = [];
+bindings[87] = "jump"; //bindings for actions in library.actions
+bindings[83] = "fall"; //binds key code to function name
+var ping = new Date().getTime();
+socket.emit(library.protocals.ping,{});
 socket.on(library.protocals.ping_awk, function (data) {
-	console.log("ping:" + (new Date().getTime() - time));
+	console.log("ping:" + (new Date().getTime() - ping));
 });
 socket.on(library.protocals.init, function (data) {
     console.log(data);
@@ -30,8 +27,6 @@ socket.on(library.protocals.update, function (data) {
 var canvas = document.getElementById("main");
 var context = canvas.getContext("2d");
 context.fillStyle = "rgb(200,0,0)";
-var ping = new Date().getTime();
-socket.emit(library.protocals.ping,{});
 var time;
 var x = 0;
 function draw() {
@@ -66,11 +61,14 @@ document.onkeydown = function(evt){
     if(!keys[evt.keyCode] ){
         console.log(evt);
         keys[evt.keyCode] = true;
+        if(bindings[evt.keyCode])
+            socket.emit(library.protocals.action, {action: bindings[evt.keycode], turn: true});
     }
-    
 };
 document.onkeyup = function(evt){
     console.log(evt);
     keys[evt.keyCode] = false;
+    if(bindings[evt.keyCode])
+        socket.emit(library.protocals.action, {action: bindings[evt.keycode], turn: false});
 };
 
